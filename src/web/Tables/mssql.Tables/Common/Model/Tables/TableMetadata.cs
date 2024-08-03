@@ -1,4 +1,4 @@
-﻿namespace Mssql.Server.Common.Model.Tables
+﻿namespace mssql.Tables.Common.Model.Tables
 {
     public class TableMetadata
     {

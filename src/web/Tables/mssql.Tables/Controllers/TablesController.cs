@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using mssql.server.Common; 
-using mssql.server.Service; 
-using Mssql.Server.Common.Model.Tables;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace mssql.server.Controllers
+using mssql.Tables.Common.Model.Tables;
+using mssql.Tables.Service;
+
+namespace mssql.Tables.Controllers
 {
+
     [Route("[controller]")]
     [ApiController]
     public class TablesController : ControllerBase
-    { 
-        private readonly  TableInfoService _tableInfoService; 
+    {
+        private readonly TableInfoService _tableInfoService;
         public TablesController(TableInfoService tableInfoService)
         {
             _tableInfoService = tableInfoService;
@@ -18,10 +18,10 @@ namespace mssql.server.Controllers
 
         [HttpGet("GetTableMetaData")]
         public async Task<TableMetadata> GetDetailedTableInfoAsync(string tableName)
-        { 
+        {
             return await _tableInfoService.GetDetailedTableInfoAsync(tableName);
         }
-        
+
         [HttpGet("GetTableDetails")]
         public async Task<IEnumerable<TableProperty>> GetTableDetailsAsync()
         {

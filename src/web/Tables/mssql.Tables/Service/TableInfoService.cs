@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
-using Dapper;
-using Microsoft.Extensions.Logging;
-using MSSQL.DIARY.COMN.Constant;
-using Mssql.Server.Common.Model.Tables;
-using global::mssql.server.Common;
+﻿using Dapper;
 using Microsoft.Extensions.Options;
+using System.Data.SqlClient;
+using System.Data;
+using mssql.Tables.Common.Model.Tables;
+using MSSQL.DIARY.COMN.Constant;
+using mssql.server.Common;
 
-namespace mssql.server.Service
+namespace mssql.Tables.Service
 {
+
     /// <summary>
     /// Service for retrieving information about database tables.
     /// </summary>

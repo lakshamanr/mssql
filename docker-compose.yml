@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server2022
+    ports: # not actually needed, because the two services are on the same network
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=A&VeryComplex123Password
+
+  mssql.server:
+    image: ${DOCKER_REGISTRY-}mssqlserver
+    build:
+      context: .
+      dockerfile: src/da/mssql.Server/Dockerfile
+
+  mssql.tables:
+    image: ${DOCKER_REGISTRY-}mssqltables
+    build:
+      context: .
+      dockerfile: src/web/Tables/mssql.Tables/Dockerfile
+
