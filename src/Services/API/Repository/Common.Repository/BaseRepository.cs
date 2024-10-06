@@ -43,7 +43,7 @@ namespace API.Repository.Common.Repository
         {
             return await LoadFromCacheOrQueryAsync<DatabaseFile>(
                 CacheConstants.DatabaseCache.DatabaseFiles,
-                SqlQueryConstants.DatabaseQuery.LoadDatabaseFiles 
+                SqlQueryConstants.DatabaseQuery.LoadDatabaseFiles
                     .Replace("@DatabaseName", $"'{_SqlConnectionStringBuilder.InitialCatalog}'"),
                 connection);
         }
