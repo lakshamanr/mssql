@@ -1,4 +1,4 @@
-﻿namespace Table.Domain
+﻿namespace API.Domain.Table
 {
     public class TableColumns
     {

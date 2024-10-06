@@ -1,6 +1,6 @@
 ﻿using API.Domain.Database;
+using API.Domain.Table;
 using System.Data;
-using Table.Domain;
 
 namespace API.Repository.Common.Repository
 {

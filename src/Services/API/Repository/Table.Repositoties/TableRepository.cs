@@ -1,18 +1,19 @@
-﻿using API.Repository.Common.Repository;
+﻿using API.Common;
+using API.Domain.Table;
+using API.Repository.Common.Repository;
 using Dapper;
 using Microsoft.Extensions.Caching.Distributed;
 
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
-using Table.Domain;
 
-namespace Table.Repositoties
+namespace API.Repository.Table.Repositoties
 {
     /// <summary>
     /// Service for retrieving information about database tables.
     /// </summary>
-    public class TableRepository: BaseRepository
+    public class TableRepository : BaseRepository
     {
         private readonly string _connectionString;
         private readonly ILogger<TableRepository> _logger;
@@ -22,11 +23,11 @@ namespace Table.Repositoties
         /// </summary>
         /// <param name="databaseSettings">Database settings injected via IOptions.</param>
         /// <param name="logger">Logger instance for logging information or errors.</param>
-        public TableRepository(string connectionString, ILogger<TableRepository> logger, IDistributedCache cache):base(connectionString,cache)
+        public TableRepository(string connectionString, ILogger<TableRepository> logger, IDistributedCache cache) : base(connectionString, cache)
         {
             _connectionString = connectionString;
             _logger = logger;
-            _cache=cache;
+            _cache = cache;
         }
         public async Task<TableMetadata> LoadTableMetadaa(string tableName)
         {
@@ -64,8 +65,8 @@ namespace Table.Repositoties
                         ForeignKeys = foreignKeys,
                         Properties = properties,
                         Constraint = constraint,
-                        tableFragmentations=fragmentation,
-                        tableDependices=tableDependies
+                        tableFragmentations = fragmentation,
+                        tableDependices = tableDependies
                     };
 
                     var serializedData = JsonSerializer.Serialize(detailedTableInfo);
@@ -105,49 +106,49 @@ namespace Table.Repositoties
 
         private async Task<IEnumerable<TableDescription>> GetTableDescriptionAsync(IDbConnection db, string schemaName, string tableName)
         {
-            var query = SqlQueryConstant.GetAllExtendedPropertiesofTheTable
+            var query = SqlQueryConstants.TableQuery.LoadTableExtendedProperties
                     .Replace("@SchemaName", $"'{schemaName}'")
                     .Replace("@TableName", $"'{tableName}'");
 
-           return await db.QueryAsync<TableDescription>(query);
+            return await db.QueryAsync<TableDescription>(query);
 
         }
 
         private async Task<IEnumerable<TableProperty>> GetTablePropertiesAsync(IDbConnection db, string schemaName, string tableName)
         {
-              var query = SqlQueryConstant.GetTableProperties
-                    .Replace("@SchemaName", $"'{schemaName}'")
-                    .Replace("@TableName", $"'{tableName}'");
+            var query = SqlQueryConstants.TableQuery.GetTableProperties
+                  .Replace("@SchemaName", $"'{schemaName}'")
+                  .Replace("@TableName", $"'{tableName}'");
 
-           return await db.QueryAsync<TableProperty>(query);
+            return await db.QueryAsync<TableProperty>(query);
 
         }
 
         private async Task<IEnumerable<TableColumns>> GetTableColumnInfoAsync(IDbConnection db, string tableName)
         {
-             return await db.QueryAsync<TableColumns>(SqlQueryConstant.GetAllTablesColumn, new { tblName = tableName });
-             
+            return await db.QueryAsync<TableColumns>(SqlQueryConstants.TableQuery.GetAllTablesColumn, new { tblName = tableName });
+
         }
 
         private async Task<string> GetTableCreateScriptAsync(IDbConnection db, string tableName)
         {
-            return await db.QueryFirstOrDefaultAsync<string>(SqlQueryConstant.GetTableCreateScript.Replace("@tableName", $"'{tableName}'"));
-              
+            return await db.QueryFirstOrDefaultAsync<string>(SqlQueryConstants.TableQuery.GetTableCreateScript.Replace("@tableName", $"'{tableName}'"));
+
         }
-        private async Task<IEnumerable<Domain.TableIndex>> GetTableIndexesAsync(IDbConnection db, string tableName)
+        private async Task<IEnumerable<TableIndex>> GetTableIndexesAsync(IDbConnection db, string tableName)
         {
-             return await db.QueryAsync<Domain.TableIndex>(SqlQueryConstant.GetTableIndex, new { tblName = tableName }); 
+            return await db.QueryAsync<TableIndex>(SqlQueryConstants.TableQuery.GetTableIndex, new { tblName = tableName });
         }
 
         private async Task<IEnumerable<TableForeignKey>> GetTableForeignKeysAsync(IDbConnection db, string tableName)
         {
-            return await db.QueryAsync<TableForeignKey>(SqlQueryConstant.GetAllTableForeignKeys, new { tblName = tableName });
+            return await db.QueryAsync<TableForeignKey>(SqlQueryConstants.TableQuery.GetAllTableForeignKeys, new { tblName = tableName });
         }
 
         private async Task<IEnumerable<TableConstraint>> GetTableTableConstraintAsync(IDbConnection db, string tableName)
         {
-             return await db.QueryAsync<TableConstraint>(SqlQueryConstant.GetAllKeyConstraints, new { tblName = tableName });
-             
+            return await db.QueryAsync<TableConstraint>(SqlQueryConstants.TableQuery.GetAllKeyConstraints, new { tblName = tableName });
+
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Table.Repositoties
                     parameters.Add("@level1type", "TABLE");
                     parameters.Add("@level1name", tableNameOnly);
 
-                    await db.ExecuteAsync("sys.sp_updateextendedproperty", parameters, commandType: CommandType.StoredProcedure); 
+                    await db.ExecuteAsync("sys.sp_updateextendedproperty", parameters, commandType: CommandType.StoredProcedure);
                     await _cache.RemoveAsync($"TableInfo_{tableDescription.Name}");
                 }
             }
@@ -206,14 +207,14 @@ namespace Table.Repositoties
         }
         private async Task<IEnumerable<TableFragmentation>> GetTableFragmentation(IDbConnection db, string tableName)
         {
-             
+
             return (await LoadTableFragmentationDetailsAsync(db)).Where(tf => tf.TableName == tableName).ToList();
         }
 
         private async Task<IEnumerable<TableFragmentation>> LoadTableFragmentationDetailsAsync(IDbConnection db)
-        { 
-           return await db.QueryAsync<TableFragmentation>(SqlQueryConstant.AllTableFragmentation);
-             
+        {
+            return await db.QueryAsync<TableFragmentation>(SqlQueryConstants.TableQuery.AllTableFragmentation);
+
         }
         private async Task<IEnumerable<ReferencesModel>> GetObjectDependencies(string cacheKeyPrefix, IDbConnection db, string astrObjectName, string sqlQueryTemplate)
         {
@@ -225,14 +226,14 @@ namespace Table.Repositoties
 
         private async Task<string> GetObjectThatDependsOn(IDbConnection db, string astrObjectName)
         {
-            var dependencies =(List<ReferencesModel>)await GetObjectDependencies("GetObjectThatDependsOn", db, astrObjectName, SqlQueryConstant.ObjectThatDependsOn);
+            var dependencies = (List<ReferencesModel>)await GetObjectDependencies("GetObjectThatDependsOn", db, astrObjectName, SqlQueryConstants.TableQuery.ObjectThatDependsOn);
 
             return GetObjectThatDependsOnJson(dependencies);
         }
 
         private async Task<string> GetObjectOnWhichDepends(IDbConnection db, string astrObjectName)
         {
-            var dependencies = (List<ReferencesModel>)await GetObjectDependencies("GetObjectOnWhichDepends", db, astrObjectName, SqlQueryConstant.ObjectOnWhichDepends);
+            var dependencies = (List<ReferencesModel>)await GetObjectDependencies("GetObjectOnWhichDepends", db, astrObjectName, SqlQueryConstants.TableQuery.ObjectOnWhichDepends);
 
             return GetObjectOnWhichDependsOnJson(dependencies);
         }
@@ -312,7 +313,7 @@ namespace Table.Repositoties
         public async Task<string> GetTableDependies(IDbConnection db, string tableName)
         {
             var objThatDependsOn = await GetObjectThatDependsOn(db, tableName);
-            var objOnWhichDepends = await GetObjectOnWhichDepends(db, tableName); 
+            var objOnWhichDepends = await GetObjectOnWhichDepends(db, tableName);
             return JsonResult(objThatDependsOn, objOnWhichDepends, tableName);
         }
 

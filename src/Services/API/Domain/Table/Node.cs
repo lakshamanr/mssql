@@ -1,5 +1,4 @@
-﻿
-namespace Table.Domain
+﻿namespace API.Domain.Table
 {
     public class Node
     {
@@ -58,9 +57,9 @@ namespace Table.Domain
             }
             else
             {
-                s = s+
+                s = s +
                     GetSQLObject(name);
-                    
+
             }
             bool f = true;
             foreach (Node n in Soon)
@@ -168,17 +167,17 @@ namespace Table.Domain
                     iconClass = "fa fa-file-code-o";
                     break;
                 default:
-                     
+
                     break;
             }
 
-            if (iconClass!=null && iconClass!=string.Empty)
+            if (iconClass != null && iconClass != string.Empty)
             {
 
                 return "{\"label\":\"" + name + "\","
                              + "\"expandedIcon\":\"" + iconClass + "\","
                              + "\"styleClass\":\"" + styleClass + "\","
-                             + "\"collapsedIcon\":\""+iconClass+"\","
+                             + "\"collapsedIcon\":\"" + iconClass + "\","
                              + "\"children\":[";
 
             }

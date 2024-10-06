@@ -1,8 +1,7 @@
 using API.Repository.Database.Repository;
 using API.Repository.LeftMenu.Repository;
-using Microsoft.Extensions.Caching.Distributed;
-using Table.Repositoties;
-
+using API.Repository.Table.Repositoties;
+using Microsoft.Extensions.Caching.Distributed; 
 internal class Program
 {
     private static void Main(string[] args)

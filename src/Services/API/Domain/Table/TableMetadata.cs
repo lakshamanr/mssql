@@ -1,4 +1,4 @@
-﻿namespace Table.Domain
+﻿namespace API.Domain.Table
 {
     public class TableMetadata
     {
@@ -10,6 +10,6 @@
         public IEnumerable<TableProperty> Properties { get; set; }
         public IEnumerable<TableConstraint> Constraint { get; set; }
         public IEnumerable<TableFragmentation> tableFragmentations { get; set; }
-        public string tableDependices {  get; set; }
+        public string tableDependices { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Table.Domain;
+﻿using API.Domain.Table;
 
 namespace API.Domain.Database
 {

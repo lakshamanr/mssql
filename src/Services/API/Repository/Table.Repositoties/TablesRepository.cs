@@ -2,9 +2,9 @@
 using API.Repository.Common.Repository;
 
 
-namespace Table.Repositoties
+namespace API.Repository.Table.Repositoties
 {
-    public class TablesRepository:BaseRepository
+    public class TablesRepository : BaseRepository
     {
         private readonly string _connectionString;
         private readonly ILogger<TableRepository> _logger;
