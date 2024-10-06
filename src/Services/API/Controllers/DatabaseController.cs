@@ -1,5 +1,4 @@
 ﻿using API.Repository.Database.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -16,11 +15,13 @@ namespace API.Controllers
         }
 
         [HttpGet("database-meta-data")]
-        public async Task<IActionResult> GetDatabaseMetaData()
+        public async Task<IActionResult> GetDatabaseMetaDataAsync(CancellationToken cancellationToken)
         {
-            var result = await _repository.GetDatabaseMetaData();
+            var result = await _repository.GetDatabaseMetaData().ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
             return Ok(result);
         }
+
 
     }
 }

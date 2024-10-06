@@ -1,6 +1,5 @@
-﻿using API.Repository.Common.Repository;
+﻿using API.Repository.Common;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
 
 namespace API.Repository.Database.Repository
 {

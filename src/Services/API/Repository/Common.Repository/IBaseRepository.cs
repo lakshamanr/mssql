@@ -2,7 +2,7 @@
 using API.Domain.Table;
 using System.Data;
 
-namespace API.Repository.Common.Repository
+namespace API.Repository.Common
 {
     public interface IBaseRepository
     {
@@ -14,7 +14,7 @@ namespace API.Repository.Common.Repository
         Task<IEnumerable<DatabaseInfo>> LoadDatabases(IDbConnection connection = null);
         Task<DatabaseMetaData> GetDatabaseMetaData();
         Task<IEnumerable<FunctionInfo>> LoadScalarFunctionsAsync(string currentDbName = null);
-        Task<IEnumerable<ServerProperty>?> LoadServerPropertiesAsync(IDbConnection connection = null);
+        Task<IEnumerable<ServerProperty>> LoadServerPropertiesAsync(IDbConnection connection = null);
         Task<IEnumerable<ProcedureInfo>> LoadStoredProceduresAsync(string currentDbName = null);
         Task<IEnumerable<FunctionInfo>> LoadTableValuedFunctionsAsync(string currentDbName = null);
         Task<IEnumerable<FunctionInfo>> LoadAggregateFunctionsAsync(string currentDbName = null);

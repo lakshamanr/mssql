@@ -1,6 +1,6 @@
 ﻿using API.Common.Helper;
 using API.Domain.LeftMenu;
-using API.Repository.Common.Repository;
+using API.Repository.Common;
 namespace API.Factory.LeftMenu.Factory
 {
     public class TreeViewTableNodeFactory : TreeViewNodeFactory

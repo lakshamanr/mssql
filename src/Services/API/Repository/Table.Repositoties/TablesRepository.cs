@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using API.Repository.Common.Repository;
+﻿using API.Repository.Common;
+using Microsoft.Extensions.Caching.Distributed;
 
 
-namespace API.Repository.Table.Repositoties
+namespace API.Repository.Table
 {
     public class TablesRepository : BaseRepository
     {
         private readonly string _connectionString;
         private readonly ILogger<TableRepository> _logger;
-        private readonly IDistributedCache _cache;
         /// <summary>
         /// Constructor for the TableInfoService.
         /// </summary>
@@ -18,7 +17,6 @@ namespace API.Repository.Table.Repositoties
         {
             _connectionString = connectionString;
             _logger = logger;
-            _cache = cache;
 
         }
     }

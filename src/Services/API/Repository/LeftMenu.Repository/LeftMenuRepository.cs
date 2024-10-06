@@ -1,23 +1,23 @@
 ﻿
-using Microsoft.Extensions.Caching.Distributed;
-using API.Service.LeftMenu.Service;
-using API.Repository.Common.Repository;
 using API.Domain.LeftMenu;
+using API.Repository.Common;
+using API.Service.LeftMenu.Service;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-namespace API.Repository.LeftMenu.Repository
+namespace API.Repository.LeftMenu
 {
 
     public class LeftMenuRepository : BaseRepository
     {
         private readonly string _connectionString;
-        private readonly ILogger<LeftMenuRepository> _logger; 
+        private readonly ILogger<LeftMenuRepository> _logger;
         private TreeViewJsonGenerator treeViewJsonGenerator { get; set; }
 
         public LeftMenuRepository(string connectionString, ILogger<LeftMenuRepository> logger, IDistributedCache cache)
             : base(connectionString, cache)
         {
             _connectionString = connectionString;
-            _logger = logger; 
+            _logger = logger;
             treeViewJsonGenerator = new TreeViewJsonGenerator(this);
         }
 

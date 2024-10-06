@@ -1,5 +1,5 @@
 ﻿using API.Domain.LeftMenu;
-using API.Repository.Common.Repository;
+using API.Repository.Common;
 namespace API.Factory.LeftMenu.Factory
 {
     internal class TreeViewSecurityNodeFactory : TreeViewNodeFactory

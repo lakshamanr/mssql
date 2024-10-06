@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
 
-namespace API.Repository.Common.Repository
+namespace API.Repository.Common
 {
     public class BaseRepository : IBaseRepository
     {
@@ -276,7 +276,7 @@ namespace API.Repository.Common.Repository
                 var serializedData = JsonSerializer.Serialize(tableResult);
                 return tableResult;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Enumerable.Empty<TablesMetadata>(); // Return empty collection to avoid null issues
             }

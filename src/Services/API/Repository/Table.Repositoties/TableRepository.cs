@@ -1,6 +1,6 @@
 ﻿using API.Common;
 using API.Domain.Table;
-using API.Repository.Common.Repository;
+using API.Repository.Common;
 using Dapper;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -8,7 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
 
-namespace API.Repository.Table.Repositoties
+namespace API.Repository.Table
 {
     /// <summary>
     /// Service for retrieving information about database tables.
@@ -17,7 +17,6 @@ namespace API.Repository.Table.Repositoties
     {
         private readonly string _connectionString;
         private readonly ILogger<TableRepository> _logger;
-        private readonly IDistributedCache _cache;
         /// <summary>
         /// Constructor for the TableInfoService.
         /// </summary>
@@ -27,9 +26,8 @@ namespace API.Repository.Table.Repositoties
         {
             _connectionString = connectionString;
             _logger = logger;
-            _cache = cache;
         }
-        public async Task<TableMetadata> LoadTableMetadaa(string tableName)
+        public async Task<TableMetadata> LoadTableMetadata(string tableName)
         {
             var cacheKey = $"TableInfo_{tableName}";
             var cachedData = await _cache.GetStringAsync(cacheKey);

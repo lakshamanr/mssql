@@ -47,6 +47,7 @@ import { TablesModule } from './table/tables.module';
 import { DatabaseModule } from './database/database.module'; 
 import { LeftmenuComponent } from './left-menu/components/leftmenu/leftmenu.component';
 import { ProcedureModule } from './procedure/procedure.module';
+import { ProcedureComponent } from './procedure/components/procedure/procedure.component';
 
 
 const appRoutes: Routes = [
@@ -89,7 +90,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     MainPageComponent, 
     HeaderComponent,
     FooterComponent, 
-    LeftmenuComponent
+    LeftmenuComponent,
+    ProcedureComponent
   ], 
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -124,7 +126,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     AngularMultiSelectModule,
     TablesModule,
     DatabaseModule,
-    ProcedureModule
+  /*  ProcedureModule*/
   ],
   providers:
     [

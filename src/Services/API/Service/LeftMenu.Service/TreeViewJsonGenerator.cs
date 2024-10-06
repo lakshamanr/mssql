@@ -1,14 +1,13 @@
 ﻿using API.Domain.LeftMenu;
 using API.Factory.LeftMenu.Factory;
-using API.Repository.Common.Repository;
+using API.Repository.Common;
 
 namespace API.Service.LeftMenu.Service
 {
     public class TreeViewJsonGenerator
     {
-        private TreeViewConfiguration? _treeViewContext;
+        private TreeViewConfiguration _treeViewContext;
         private readonly IBaseRepository _baseRepository;
-        private string? _currentDbName;
         public TreeViewJsonGenerator(IBaseRepository baseRepository)
         {
             _baseRepository = baseRepository;
