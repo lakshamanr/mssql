@@ -14,9 +14,9 @@ namespace API.Repository.Common
         private readonly string _connectionString;
         private SqlConnectionStringBuilder _SqlConnectionStringBuilder;
 
-        DistributedCacheEntryOptions cacheEntryOptions = new DistributedCacheEntryOptions()
-                  .SetSlidingExpiration(TimeSpan.FromMinutes(60)) // Set expiration time for cache
-            .SetAbsoluteExpiration(TimeSpan.FromHours(24)); // Optional absolute expiration
+        public DistributedCacheEntryOptions cacheEntryOptions = new DistributedCacheEntryOptions()
+                   .SetSlidingExpiration(TimeSpan.FromMinutes(60)) // Set expiration time for cache
+             .SetAbsoluteExpiration(TimeSpan.FromHours(24)); // Optional absolute expiration
         public readonly IDistributedCache _cache;
 
         public BaseRepository(string connectionString, IDistributedCache cache)

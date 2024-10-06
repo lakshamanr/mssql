@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcedureService } from '../../service/procedure.service';
-import { ProcedureMetaData } from '../../model/Procedure-metadata';
+import { ProcedureMetadata } from '../../model/Procedure-metadata';
 
 @Component({
   selector: 'app-procedures',
@@ -9,13 +9,13 @@ import { ProcedureMetaData } from '../../model/Procedure-metadata';
 })
 export class ProceduresComponent implements OnInit {
 
-  procedureMetaData: ProcedureMetaData;
+  procedureMetaData: ProcedureMetadata;
 
   constructor(private procedureService: ProcedureService) { }
 
   loadProcedureData() {
     this.procedureService.LoadStoreProcedureMetaData().subscribe(
-      (data: ProcedureMetaData) => {
+      (data: ProcedureMetadata) => {
         // Handle the success case, e.g., save data to a variable or process it
         console.log('Procedure meta data loaded:', data);
         // You can now use the 'data' object in your component

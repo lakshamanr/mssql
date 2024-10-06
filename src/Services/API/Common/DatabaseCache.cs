@@ -19,5 +19,9 @@
             public static string DatabaseFiles = "DatabaseFiles";
             public static string ViewDetails = "ViewDetails";
         }
+        public static class procedureCache
+        {
+            public static string StoreProcedureExecutionPlanCache = @"ExecutionPlan@storedProcName";
+        }
     }
 }

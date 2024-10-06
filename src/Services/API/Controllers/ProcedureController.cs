@@ -1,4 +1,5 @@
-﻿using API.Repository.Procedure.Repository;
+﻿using API.Model.Procedure;
+using API.Repository.Procedure.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -13,10 +14,9 @@ namespace API.Controllers
             _procedureRepository = procedureRepository;
         }
         [HttpGet("procedure-meta-data")]
-        public async Task<IActionResult> LoadProcedureMetData(CancellationToken cancellationToken)
+        public async Task<ProcedureMetadata> LoadProcedureMetData(string procedurename, CancellationToken cancellationToken)
         {
-
-            return Ok("Hello ");
+            return await _procedureRepository.LoadProcedureMetaData(procedurename);
         }
 
     }

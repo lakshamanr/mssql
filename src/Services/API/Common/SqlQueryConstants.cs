@@ -490,5 +490,93 @@
         LEFT JOIN sys.database_principals dp 
             ON s.principal_id = dp.principal_id";
         }
+
+        public class ProcedureQuery
+        {
+            public readonly static string GetExecutionPlanOfStoreProc =
+                @" 
+DECLARE @executionPlan XML;  
+
+SELECT 
+    @executionPlan = qp.query_plan
+FROM 
+    sys.dm_exec_cached_plans AS cp
+CROSS APPLY 
+    sys.dm_exec_query_plan(cp.plan_handle) AS qp
+WHERE 
+    cp.objtype = 'Proc' 
+    AND OBJECT_NAME(qp.objectid) = PARSENAME(@procName, 1) 
+    AND OBJECT_SCHEMA_NAME(qp.objectid) = PARSENAME(@procName, 2); 
+
+IF @executionPlan IS NULL
+BEGIN
+    DECLARE @dummySql NVARCHAR(MAX) = '';
+    DECLARE @paramName NVARCHAR(255);
+    DECLARE @paramType NVARCHAR(255);
+    DECLARE @dummyValue NVARCHAR(255);
+    DECLARE @dynamicExec NVARCHAR(MAX);
+
+    -- Step 2: Retrieve parameter names and types
+    DECLARE parameter_cursor CURSOR FOR 
+    SELECT 
+        name, 
+        type_name(user_type_id) AS TypeName
+    FROM 
+        sys.parameters 
+    WHERE 
+        object_id = OBJECT_ID(@procName);
+
+    OPEN parameter_cursor;
+    FETCH NEXT FROM parameter_cursor INTO @paramName, @paramType;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @dummyValue = 
+            CASE @paramType
+                WHEN 'int' THEN '0'
+                WHEN 'nvarchar' THEN '''dummy'''
+                WHEN 'varchar' THEN '''dummy'''
+                WHEN 'datetime' THEN '''2024-01-01''' 
+                ELSE 'NULL' -- Default to NULL for unknown types
+            END;
+
+        SET @dummySql = @dummySql + @paramName + ' = ' + @dummyValue + ', ';
+        FETCH NEXT FROM parameter_cursor INTO @paramName, @paramType;
+    END
+
+    CLOSE parameter_cursor;
+    DEALLOCATE parameter_cursor;
+
+    IF LEN(@dummySql) > 0
+    BEGIN
+        SET @dummySql = LEFT(@dummySql, LEN(@dummySql) - 1);
+        
+        SET @dynamicExec = 'EXEC ' + @procName + ' ' + @dummySql;
+        EXEC sp_executesql @dynamicExec;
+    END
+END
+
+;WITH CachedPlans AS (
+    SELECT 
+        cp.plan_handle,
+        qp.query_plan, 
+        qp.objectid
+    FROM 
+        sys.dm_exec_cached_plans AS cp
+    CROSS APPLY 
+        sys.dm_exec_query_plan(cp.plan_handle) AS qp
+    WHERE 
+        cp.objtype IN ('Proc', 'Adhoc')
+)
+SELECT 
+    CAST([qp].[query_plan] AS NVARCHAR(MAX)) AS QueryPlanXml 
+FROM 
+    CachedPlans AS qp
+WHERE 
+    OBJECT_NAME(qp.objectid) = PARSENAME(@procName, 1) 
+    AND OBJECT_SCHEMA_NAME(qp.objectid) = PARSENAME(@procName, 2);
+               
+               ";
+        }
     }
 }
