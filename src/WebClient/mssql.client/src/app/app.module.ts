@@ -48,6 +48,7 @@ import { DatabaseModule } from './database/database.module';
 import { LeftmenuComponent } from './left-menu/components/leftmenu/leftmenu.component';
 import { ProcedureModule } from './procedure/procedure.module';
 import { ProcedureComponent } from './procedure/components/procedure/procedure.component';
+import { ProcedureService } from './procedure/service/procedure.service';
 
 
 const appRoutes: Routes = [
@@ -135,7 +136,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
         useClass: HashLocationStrategy
       }, 
       TreeDragDropService,
-      MessageService
+      MessageService,
+      ProcedureService
     ],
   bootstrap: [AppComponent]
 })

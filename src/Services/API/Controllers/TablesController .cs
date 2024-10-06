@@ -6,7 +6,7 @@ namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class TablesController : ControllerBase
+    public class TablesController : BaseController
     {
         private readonly TableRepository _tableRepository;
         private readonly TablesRepository _tablesRepository;

@@ -1,87 +1,106 @@
 using API.Repository.Database.Repository;
 using API.Repository.LeftMenu;
+using API.Repository.Procedure.Repository;
 using API.Repository.Table;
 using Microsoft.Extensions.Caching.Distributed;
-internal class Program
+public class Program
 {
-    private static void Main(string[] args)
+    public static void Main(string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Configuration.Sources.Clear();
+        // Clear default configuration sources and setup custom configurations
+        ConfigureAppSettings(builder, args);
 
-        builder.Configuration
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables()
-                .AddCommandLine(args);
+        // Configure Redis Cache
+        ConfigureRedisCache(builder);
 
+        // Configure repositories with generic registration method
+        RegisterRepositories(builder);
 
-        var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
-
-        // Check if the connection string is null or empty
-        if (string.IsNullOrEmpty(redisConnectionString))
-        {
-            throw new ArgumentNullException("Redis connection string cannot be null or empty.");
-        }
-
-
-        // Configure Redis caching
-        builder.Services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-            options.InstanceName = "mssqlInstance:";
-        });
-        var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
-
-        builder.Services.AddScoped(provider =>
-        {
-
-            var logger = provider.GetRequiredService<ILogger<DatabaseReposititory>>();
-            var cache = provider.GetRequiredService<IDistributedCache>();
-            return new DatabaseReposititory(connectionString, logger, cache);
-        });
-        builder.Services.AddScoped(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<LeftMenuRepository>>();
-            var cache = provider.GetRequiredService<IDistributedCache>();
-            return new LeftMenuRepository(connectionString, logger, cache);
-        });
-
-        builder.Services.AddScoped(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<TableRepository>>();
-            var cache = provider.GetRequiredService<IDistributedCache>();
-            return new TableRepository(connectionString, logger, cache);
-        });
-
-        builder.Services.AddScoped(provider =>
-        {
-
-            var logger = provider.GetRequiredService<ILogger<TableRepository>>();
-            var cache = provider.GetRequiredService<IDistributedCache>();
-            return new TablesRepository(connectionString, logger, cache);
-        });
-
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("AllowOrigin",
-                   builder => builder.WithOrigins("http://localhost:4200") // or the URL of your Angular app
-                                     .AllowAnyMethod()
-                                     .AllowAnyHeader());
-        });
+        // Configure CORS
+        ConfigureCors(builder);
 
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
-        app.UseCors("AllowAllOrigins");
-        // Configure the HTTP request pipeline.
+        // Setup middlewares
+        SetupMiddlewares(app);
+
+        app.Run();
+    }
+
+    private static void ConfigureAppSettings(WebApplicationBuilder builder, string[] args)
+    {
+        builder.Configuration.Sources.Clear();
+
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+            .AddEnvironmentVariables()
+            .AddCommandLine(args);
+    }
+
+    private static void ConfigureRedisCache(WebApplicationBuilder builder)
+    {
+        var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+
+        // Validate Redis connection string
+        if (string.IsNullOrEmpty(redisConnectionString))
+        {
+            throw new ArgumentNullException("Redis connection string is required.");
+        }
+
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisConnectionString;
+            options.InstanceName = "mssqlInstance:";
+        });
+    }
+
+    private static void RegisterRepositories(WebApplicationBuilder builder)
+    {
+        var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
+
+        // Generic repository registration to avoid repetitive code
+        RegisterRepository<DatabaseRepository>(builder, connectionString);
+        RegisterRepository<LeftMenuRepository>(builder, connectionString);
+        RegisterRepository<TableRepository>(builder, connectionString);
+        RegisterRepository<TablesRepository>(builder, connectionString);
+        RegisterRepository<ProcedureRepository>(builder, connectionString);
+    }
+
+    private static void RegisterRepository<T>(WebApplicationBuilder builder, string connectionString) where T : class
+    {
+        builder.Services.AddScoped(provider =>
+        {
+            var logger = provider.GetRequiredService<ILogger<T>>();
+            var cache = provider.GetRequiredService<IDistributedCache>();
+            return Activator.CreateInstance(typeof(T), connectionString, logger, cache) as T;
+        });
+    }
+
+    private static void ConfigureCors(WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowOrigin", policyBuilder =>
+            {
+                policyBuilder.WithOrigins("http://localhost:4200") // Update URL as necessary
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+            });
+        });
+    }
+
+    private static void SetupMiddlewares(WebApplication app)
+    {
+        app.UseCors("AllowOrigin");
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -91,7 +110,5 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
-        app.Run();
     }
 }

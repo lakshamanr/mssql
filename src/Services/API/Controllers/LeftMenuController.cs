@@ -5,7 +5,7 @@ namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class LeftMenuController : ControllerBase
+    public class LeftMenuController : BaseController
     {
         private readonly LeftMenuRepository _leftMenuRepository;
         public LeftMenuController(LeftMenuRepository leftMenuRepository)
@@ -13,9 +13,9 @@ namespace API.Controllers
             _leftMenuRepository = leftMenuRepository;
         }
         [HttpGet("left-menu")]
-        public async Task<string> GetLeftMenu()
+        public async Task<string> GetLeftMenuAsync(CancellationToken cancellationToken)
         {
-            return await _leftMenuRepository.GetLeftMenuAsync();
+            return await _leftMenuRepository.GetLeftMenuAsync().ConfigureAwait(false);
         }
 
     }

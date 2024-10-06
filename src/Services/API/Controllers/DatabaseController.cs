@@ -5,11 +5,11 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DatabaseController : ControllerBase
+    public class DatabaseController : BaseController
     {
-        private readonly DatabaseReposititory _repository;
+        private readonly DatabaseRepository _repository;
 
-        public DatabaseController(DatabaseReposititory repository)
+        public DatabaseController(DatabaseRepository repository)
         {
             _repository = repository;
         }

@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProcedureComponent implements OnInit {
 
+  SpName: string= "";
   constructor() { }
 
   ngOnInit() {

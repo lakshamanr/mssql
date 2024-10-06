@@ -1,4 +1,3 @@
-export class Procedures 
-{
-    
+export class ProcedureMetaData {
+
 }
