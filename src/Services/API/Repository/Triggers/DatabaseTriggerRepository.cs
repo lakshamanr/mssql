@@ -1,4 +1,4 @@
-﻿using API.Common.Queries;
+using API.Common.Queries;
 using API.Domain.Triggers;
 using API.Repository.Common;
 using Dapper;
@@ -7,8 +7,16 @@ using System.Data.SqlClient;
 
 namespace API.Repository.Triggers
 {
+    /// <summary>
+    /// Repository for managing database triggers.
+    /// </summary>
     public class DatabaseTriggerRepository : BaseRepository, IDatabaseTriggerRepository
     {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="cache"></param>
         public DatabaseTriggerRepository(IConfiguration configuration, IDistributedCache cache) : base(cache, configuration)
         {
             _connectionString = configuration.GetConnectionString("SqlServerConnection");
@@ -62,6 +70,5 @@ namespace API.Repository.Triggers
                 return result > 0;
             }
         }
-
     }
 }

@@ -1,10 +1,13 @@
-﻿using API.Domain.StoredProcedure;
+using API.Domain.StoredProcedure;
 using API.Repository.StoreProcedure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// Controller for handling stored procedure related operations.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class StoredProcedureController : ControllerBase

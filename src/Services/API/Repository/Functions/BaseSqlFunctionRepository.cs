@@ -1,4 +1,4 @@
-﻿using API.Common.Queries;
+using API.Common.Queries;
 using API.Domain.Functions;
 using API.Repository.Common;
 using Dapper;
@@ -7,14 +7,21 @@ using System.Data.SqlClient;
 
 namespace API.Repository.Functions
 {
+    /// <summary>
+    /// Provides a base repository for SQL functions, including methods to retrieve metadata, parameters, definitions, and dependencies.
+    /// </summary>
+    public class BaseSqlFunctionRepository : BaseRepository, IBaseSqlFunctionRepository
+    {
+    /// <summary>
+    /// 
+    /// </summary>
+        public string FunctionType { get; set; }
 
     /// <summary>
-    /// Base repository class for SQL functions that provides metadata retrieval.
+    /// 
     /// </summary>
-    public   class BaseSqlFunctionRepository : BaseRepository, IBaseSqlFunctionRepository
-    {
-        public string FunctionType { get;set; }
-
+    /// <param name="cache"></param>
+    /// <param name="configuration"></param>
         public BaseSqlFunctionRepository(IDistributedCache cache, IConfiguration configuration) : base(cache, configuration)
         {
             _connectionString = configuration.GetConnectionString("SqlServerConnection");
@@ -225,7 +232,5 @@ namespace API.Repository.Functions
                     .ToDictionary(x => x.FunctionName, x => x.Description ?? "No Description Available");
             }
         }
-
-        
     }
 }

@@ -1,4 +1,4 @@
-﻿using API.Common;
+using API.Common;
 using API.Common.Queries;
 using API.Domain.Database;
 using API.Domain.Table;
@@ -11,21 +11,33 @@ using System.Text.Json;
 
 namespace API.Repository.Common
 {
-    /// <summary>
+  
+/// <summary>
     /// Base repository class providing common database operations.
     /// </summary>
     public class BaseRepository : IBaseRepository
     {
-        internal   string _connectionString;
+        internal string _connectionString;
+    /// <summary>
+    /// 
+    /// </summary>
         public string? CurrentDatabases { get { return _sqlConnectionStringBuilder?.InitialCatalog; } }
+    /// <summary>
+    /// 
+    /// </summary>
         public string? DataSource { get { return _sqlConnectionStringBuilder?.DataSource; } }
 
         private SqlConnectionStringBuilder _sqlConnectionStringBuilder;
-
+    /// <summary>
+    /// 
+    /// </summary>
         public DistributedCacheEntryOptions cacheEntryOptions = new DistributedCacheEntryOptions()
                   .SetSlidingExpiration(TimeSpan.FromMinutes(60)) // Set expiration time for cache
             .SetAbsoluteExpiration(TimeSpan.FromHours(24)); // Optional absolute expiration
-        public readonly IDistributedCache _cache;
+    /// <summary>
+    /// 
+    /// </summary>
+     public readonly IDistributedCache _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRepository"/> class.
@@ -37,7 +49,6 @@ namespace API.Repository.Common
             _cache = cache;
             _connectionString = configuration.GetConnectionString("SqlServerConnection");
             _sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
-            
         }
 
         /// <summary>
@@ -56,7 +67,7 @@ namespace API.Repository.Common
             connectionStringBuilder.InitialCatalog = currentDbName;
             IDbConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString);
             return connection;
-        } 
+        }
 
         /// <summary>
         /// Processes metadata and groups it by table name.
@@ -101,7 +112,7 @@ namespace API.Repository.Common
 
             return result.Values.ToList();
         }
-         
+
         /// <summary>
         /// Gets a database connection.
         /// </summary>
@@ -251,24 +262,24 @@ namespace API.Repository.Common
 
                 // Build the server properties list
                 var serverProperties = new List<ServerProperty>
-                {
-                    new ServerProperty { Name = "ProductName", Value = properties.ProductName },
-                    new ServerProperty { Name = "ProductMajorVersion", Value = properties.ProductMajorVersion },
-                    new ServerProperty { Name = "ProductBuild", Value = properties.ProductBuild },
-                    new ServerProperty { Name = "InstanceDefaultLogPath", Value = properties.InstanceDefaultLogPath },
-                    new ServerProperty { Name = "Edition", Value = properties.Edition },
-                    new ServerProperty { Name = "BuildClrVersion", Value = properties.BuildClrVersion },
-                    new ServerProperty { Name = "Collation", Value = properties.Collation },
-                    new ServerProperty
                     {
-                        Name = "ComputerNamePhysicalNetBIOS",
-                        Value = properties.ComputerNamePhysicalNetBIOS
-                    },
-                    new ServerProperty { Name = "EngineEdition", Value = properties.EngineEdition },
-                    new ServerProperty { Name = "Language", Value = properties.Language },
-                    new ServerProperty { Name = "Platform", Value = properties.Platform },
-                    new ServerProperty { Name = "IsClustered", Value = properties.IsClustered }
-                };
+                        new ServerProperty { Name = "ProductName", Value = properties.ProductName },
+                        new ServerProperty { Name = "ProductMajorVersion", Value = properties.ProductMajorVersion },
+                        new ServerProperty { Name = "ProductBuild", Value = properties.ProductBuild },
+                        new ServerProperty { Name = "InstanceDefaultLogPath", Value = properties.InstanceDefaultLogPath },
+                        new ServerProperty { Name = "Edition", Value = properties.Edition },
+                        new ServerProperty { Name = "BuildClrVersion", Value = properties.BuildClrVersion },
+                        new ServerProperty { Name = "Collation", Value = properties.Collation },
+                        new ServerProperty
+                        {
+                            Name = "ComputerNamePhysicalNetBIOS",
+                            Value = properties.ComputerNamePhysicalNetBIOS
+                        },
+                        new ServerProperty { Name = "EngineEdition", Value = properties.EngineEdition },
+                        new ServerProperty { Name = "Language", Value = properties.Language },
+                        new ServerProperty { Name = "Platform", Value = properties.Platform },
+                        new ServerProperty { Name = "IsClustered", Value = properties.IsClustered }
+                    };
                 return serverProperties;
             }
             finally
@@ -289,8 +300,6 @@ namespace API.Repository.Common
                 SqlQueryConstant.LoadStoredProcedures,
                 GetDbConnection(currentDbName));
         }
-
-      
 
         /// <summary>
         /// Loads tables metadata from cache or queries the database.
@@ -404,6 +413,5 @@ namespace API.Repository.Common
                 return null;
             }
         }
-         
     }
 }

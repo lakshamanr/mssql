@@ -1,4 +1,4 @@
-﻿using API.Domain.UserDefinedDataType;
+using API.Domain.UserDefinedDataType;
 using API.Repository.UserDefinedDataType;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
   
+/// <summary>
+    /// Controller for managing user-defined data types.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class UserDefinedDataTypeController : ControllerBase

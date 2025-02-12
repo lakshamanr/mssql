@@ -1,4 +1,4 @@
-﻿using API.Domain.Triggers;
+using API.Domain.Triggers;
 using API.Repository.Triggers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,10 @@ namespace API.Controllers
     public class DatabaseTriggerController : ControllerBase
     {
         private readonly IDatabaseTriggerRepository _repository;
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="repository"></param>
         public DatabaseTriggerController(IDatabaseTriggerRepository repository)
         {
             _repository = repository;

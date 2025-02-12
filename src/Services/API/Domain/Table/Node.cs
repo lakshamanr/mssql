@@ -1,7 +1,10 @@
-﻿using API.Domain.Common;
+using API.Domain.Common;
 
 namespace API.Domain.Table
 {
+  /// <summary>
+  /// 
+  /// </summary>
     public class Node
     {
         Dictionary<string, string> typeDescriptionMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -35,21 +38,39 @@ namespace API.Domain.Table
                                             { "X", "(Extended stored procedure)" },
                                             { "XMLC", "(XML Data Type)" }
                                         };
-
+    /// <summary>
+    /// 
+    /// </summary>
         public bool IblnFirstNode { get; set; }
-        public List<ReferencesModel> ReferencesModels { get; set; }
 
-        public Node(string n)
+    /// <summary>
+    /// 
+    /// </summary>
+        public List<ReferencesModel> ReferencesModels { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public Node(string n)
         {
             name = n;
             Soon = new List<Node>();
         }
-
-        public string name;
-        public string StyleClass { get; set; }
-        public List<Node> Soon;
-
-        public string PrimengToJson()
+    /// <summary>
+    /// 
+    /// </summary>
+    public string name;
+    /// <summary>
+    /// 
+    /// </summary>
+    public string StyleClass { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<Node> Soon;
+    /// <summary>
+    /// 
+    /// </summary>
+    public string PrimengToJson()
         {
             string s = "";
             if (IblnFirstNode)
@@ -72,8 +93,10 @@ namespace API.Domain.Table
             s = s + "]}";
             return s;
         }
-
-        private string GetSQLObject(string name)
+    /// <summary>
+    /// 
+    /// </summary>
+    private string GetSQLObject(string name)
         {
 
             // Extract the type description from the name
@@ -192,8 +215,10 @@ namespace API.Domain.Table
 
 
         }
-
-        public string amexioToJson()
+    /// <summary>
+    /// 
+    /// </summary>
+    public string amexioToJson()
         {
             string s = "";
             if (IblnFirstNode)

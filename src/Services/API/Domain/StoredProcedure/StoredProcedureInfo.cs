@@ -1,10 +1,19 @@
-﻿namespace API.Domain.StoredProcedure
+namespace API.Domain.StoredProcedure
 {
-    // Models.cs
+    /// <summary>
+    /// Represents information about a stored procedure.
+    /// </summary>
     public class StoredProcedureInfo
-{
-    public string StoredProcedure { get; set; }
-    public string ExtendedProperty { get; set; }
-}
+    {
+        /// <summary>
+        /// Gets or sets the name of the stored procedure.
+        /// </summary>
+        public string StoredProcedure { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended property of the stored procedure.
+        /// </summary>
+        public string ExtendedProperty { get; set; }
+    }
 
 }

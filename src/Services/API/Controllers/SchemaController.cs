@@ -1,9 +1,12 @@
-﻿using API.Repository.SchemaRepository;
+using API.Repository.SchemaRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// Controller for handling schema-related operations.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class SchemaController : ControllerBase

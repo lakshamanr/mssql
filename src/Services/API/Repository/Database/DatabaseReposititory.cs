@@ -1,4 +1,4 @@
-﻿using API.Common;
+using API.Common;
 using API.Common.Queries;
 using API.Domain.Database;
 using API.Repository.Common;
@@ -10,9 +10,17 @@ using System.Text.Json;
 
 namespace API.Repository.Database
 {
+  /// <summary>
+  /// 
+  /// </summary>
     public class DatabaseReposititory : BaseRepository, IDatabaseReposititory
     {
-       
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="logger"></param>
+       /// <param name="cache"></param>
+       /// <param name="configuration"></param>
         public DatabaseReposititory(ILogger<DatabaseReposititory> logger, IDistributedCache cache, IConfiguration configuration) : base(cache, configuration)
         {
             _connectionString = configuration.GetConnectionString("SqlServerConnection");

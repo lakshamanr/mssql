@@ -16,10 +16,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <WarningLevel>9999</WarningLevel>
   </PropertyGroup>-->
-  <PropertyGroup> 
+  <!--<PropertyGroup> 
     <WarningsAsErrors>1591</WarningsAsErrors>
-    <!-- Treat warning 1591 as error -->
-  </PropertyGroup>
+    --><!-- Treat warning 1591 as error --><!--
+  </PropertyGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />

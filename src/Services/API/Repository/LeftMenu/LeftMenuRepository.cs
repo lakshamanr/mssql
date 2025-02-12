@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.Extensions.Caching.Distributed;
 using API.Service.LeftMenu.Service;
 using API.Domain.LeftMenu;
@@ -7,6 +7,9 @@ using API.Repository.Common;
 namespace API.Repository.LeftMenu
 {
 
+    /// <summary>
+    /// Repository class for managing the left menu.
+    /// </summary>
     public class LeftMenuRepository : BaseRepository, ILeftMenuRepository
     {
         private readonly ILogger<LeftMenuRepository> _logger;
@@ -74,9 +77,9 @@ namespace API.Repository.LeftMenu
         public async Task<List<TreeViewJson>> GenerateLeftMenuJsonAsync()
         {
             var data = new List<TreeViewJson>
-                {
-                    await TreeViewJsonGenerator.GetProjectStructureAsync()
-                };
+                    {
+                        await TreeViewJsonGenerator.GetProjectStructureAsync()
+                    };
             return data;
         }
     }

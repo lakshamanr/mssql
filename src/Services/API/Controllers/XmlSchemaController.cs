@@ -1,27 +1,33 @@
-﻿using API.Domain.XMLSchemaCollections;
+using API.Domain.XMLSchemaCollections;
 using API.Repository.XMLSchemaCollections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// Controller to handle XML Schema related operations.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class XmlSchemaController : ControllerBase
     {
         private readonly IXmlSchemaRepository _repository;
 
-        // Injecting the repository via constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlSchemaController"/> class.
+        /// </summary>
+        /// <param name="repository">The repository to access XML Schema data.</param>
         public XmlSchemaController(IXmlSchemaRepository repository)
         {
             _repository = repository;
         }
 
         /// <summary>
-        /// Endpoint to get XML Schema Details
+        /// Endpoint to get XML Schema Details.
         /// </summary>
-        /// <param name="schemaCollectionName">The name of the schema collection</param>
-        /// <returns>Details of the XML Schema</returns>
+        /// <param name="schemaCollectionName">The name of the schema collection.</param>
+        /// <returns>Details of the XML Schema.</returns>
         [HttpGet("details/{schemaCollectionName}")]
         public ActionResult<XmlSchemaDetails> GetXmlSchemaDetails(string schemaCollectionName)
         {
@@ -36,10 +42,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Endpoint to get XML Schema References
+        /// Endpoint to get XML Schema References.
         /// </summary>
-        /// <param name="schemaCollectionName">The name of the schema collection</param>
-        /// <returns>References of the XML Schema</returns>
+        /// <param name="schemaCollectionName">The name of the schema collection.</param>
+        /// <returns>References of the XML Schema.</returns>
         [HttpGet("references/{schemaCollectionName}")]
         public ActionResult<IEnumerable<XmlSchemaReference>> GetXmlSchemaReferences(string schemaCollectionName)
         {
@@ -54,9 +60,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// New endpoint to get all XML Schema Collections
+        /// New endpoint to get all XML Schema Collections.
         /// </summary>
-        /// <returns>All XML Schema Collections</returns>
+        /// <returns>All XML Schema Collections.</returns>
         [HttpGet("collections")]
         public ActionResult<IEnumerable<XmlSchemaCollection>> GetAllXmlSchemaCollections()
         {
