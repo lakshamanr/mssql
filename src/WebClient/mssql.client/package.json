@@ -55,7 +55,7 @@
     "popper.js": "^1.16.1",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0",
-    "prismjs": "^1.18.0",
+    "prismjs": "^1.30.0",
     "rxjs": "^6.5.4",
     "svg-pan-zoom": "^3.6.1",
     "zone.js": "^0.9.1"
